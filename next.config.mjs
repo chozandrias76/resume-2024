@@ -8,6 +8,18 @@ const nextConfig = {
         port: '',
         pathname: '/u/2087677**',
       },
+      {
+        protocol: 'https',
+        hostname: 'swensonhcp-resume-website.s3.us-east-2.amazonaws.com',
+        port: '',
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'place-hold.it',
+        port: '',
+        pathname: '**',
+      },
     ],
   },
 };
