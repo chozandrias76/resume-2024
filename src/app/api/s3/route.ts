@@ -22,11 +22,8 @@ export async function GET(request: Request) {
     try {
       const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 }); // URL valid for 1 hour
       return NextResponse.json({result: signedUrl}, {status: 200})
-  
-      return signedUrl;
     } catch (error) {
       console.error("Error getting presigned URL", error);
       return NextResponse.json({error}, {status: 500})
-
     }
 }
