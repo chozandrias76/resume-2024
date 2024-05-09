@@ -1,25 +1,24 @@
-import { connectToDatabase } from '@/lib/db';
-import { NextResponse } from 'next/server';
+import { KyselyDatabase } from "@/lib/database";
+import { Database } from "@/lib/database.interface";
+import { createKysely } from "@vercel/postgres-kysely";
+import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const url = new URL(request.url, `http://localhost`);
   const queryParams = url.searchParams;
+  const imageName = queryParams.get("image_name");
 
-  // Accessing the query parameters
-  const imageName = queryParams.get('image_name');
-  const db = await connectToDatabase();
+  const database = new KyselyDatabase(createKysely<Database>());
+
   try {
-    if(imageName === null) {
-      throw new Error("Can not query on this route without image_name")
+    if (imageName === null) {
+      throw new Error("Can not query on this route without image_name");
     }
-    const rows = await db.selectFrom("image_store").select("image_key").where("image_name", "=", imageName).execute();
-    console.error(rows)
-    return NextResponse.json({result: rows}, {status: 200})
+    const image = await database.getImageKeyByName(imageName);
+    console.error(image);
+    return NextResponse.json({ result: image.image_key }, { status: 200 });
   } catch (error) {
-    console.error('Failed to fetch data:', error);
-    return NextResponse.json({error}, {status: 500})
-
-  } finally {
-    await db.destroy()
+    console.error("Failed to fetch data:", error);
+    return NextResponse.json({ error }, { status: 500 });
   }
 }

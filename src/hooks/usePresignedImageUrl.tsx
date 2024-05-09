@@ -10,8 +10,7 @@ export const usePresignedImageUrl = (imageName: string) => {
         throw new Error('Failed to retrieve object key from database');
       }
       const text = await readStreamAsText(objectKey);
-      
-      return getPresignedImageUrl("swensonhcp-resume-website", JSON.parse(text).result[0].image_key);
+      return getPresignedImageUrl("swensonhcp-resume-website", JSON.parse(text).result);
     },
     {
       // Configure options here, such as cache time.
