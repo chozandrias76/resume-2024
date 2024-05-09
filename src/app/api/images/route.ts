@@ -15,7 +15,6 @@ export async function GET(request: Request) {
       throw new Error("Can not query on this route without image_name");
     }
     const image = await database.getImageKeyByName(imageName);
-    console.error(image);
     return NextResponse.json({ result: image.image_key }, { status: 200 });
   } catch (error) {
     console.error("Failed to fetch data:", error);
