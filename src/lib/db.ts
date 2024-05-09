@@ -1,14 +1,22 @@
-import { db } from '@vercel/postgres';
+import { createKysely } from "@vercel/postgres-kysely";
+
+interface ImageTable {
+  image_name: string;
+  image_key: string;
+  created_at: string;
+}
+
+interface Database {
+  image_store: ImageTable;
+}
 
 export async function connectToDatabase() {
   try {
-    const client = await db.connect();
+    const db = createKysely<Database>();
 
-    return client;
-
+    return db;
   } catch (error) {
     console.error(error);
-    throw new Error("DB connection failed\n")
+    throw new Error("DB connection failed\n");
   }
-
 }

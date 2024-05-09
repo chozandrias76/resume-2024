@@ -6,17 +6,20 @@ export async function GET(request: Request) {
   const queryParams = url.searchParams;
 
   // Accessing the query parameters
-  const imageName = queryParams.get('image_name') || "";
-  const client = await connectToDatabase();
+  const imageName = queryParams.get('image_name');
+  const db = await connectToDatabase();
   try {
-    const { rows } = await client.query(`SELECT * FROM image_store WHERE image_name = '${imageName}'`);
-
+    if(imageName === null) {
+      throw new Error("Can not query on this route without image_name")
+    }
+    const rows = await db.selectFrom("image_store").select("image_key").where("image_name", "=", imageName).execute();
+    console.error(rows)
     return NextResponse.json({result: rows}, {status: 200})
   } catch (error) {
     console.error('Failed to fetch data:', error);
     return NextResponse.json({error}, {status: 500})
 
   } finally {
-    // await client();
+    await db.destroy()
   }
 }
