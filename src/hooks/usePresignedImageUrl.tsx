@@ -1,7 +1,7 @@
-import { useQuery } from "react-query";
+import { useQuery, UseQueryResult } from "react-query";
 import { readStreamAsText } from "@/util/readStreamAsText";
 
-export const usePresignedImageUrl = (imageName: string) => {
+export const usePresignedImageUrl = (imageName: string): UseQueryResult<string> => {
   return useQuery(
     ["presignedImageUrl", imageName],
     async () => {
