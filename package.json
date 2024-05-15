@@ -15,6 +15,8 @@
     "@aws-sdk/s3-presigned-post": "^3.451.0",
     "@aws-sdk/s3-request-presigner": "^3.569.0",
     "@aws-sdk/signature-v4-crt": "^3.451.0",
+    "@react-three/drei": "^9.105.6",
+    "@react-three/fiber": "^8.16.6",
     "@vercel/postgres": "^0.8.0",
     "@vercel/postgres-kysely": "^0.8.0",
     "aws-crt": "^1.19.0",
