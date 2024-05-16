@@ -1,5 +1,10 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const {version, name} = require("./package.json");
+
+module.exports = {
+  env: {
+    version,
+    name
+  },
   images: {
     remotePatterns: [
       {
@@ -22,6 +27,4 @@ const nextConfig = {
       },
     ],
   },
-};
-
-export default nextConfig;
+}
