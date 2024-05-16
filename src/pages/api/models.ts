@@ -11,30 +11,28 @@ export default async function handler(
     let { file_type: fileType } = request.query;
     fileType ||= "stl";
     try {
-      const fileResponse = (
-        await fetch(
-          `${request.headers.referer}/api/s3?bucket_name=swensonhcp-resume-website&object_key=bust01.${fileType}`
-        )
-      );
+      const internalFetchRoute = `${request.headers.referer}/api/s3?bucket_name=swensonhcp-resume-website&object_key=bust01.${fileType}`;
+      const fileResponse = await fetch(internalFetchRoute);
 
       if (!fileResponse.ok) {
-        throw new Error('Failed to fetch file from S3');
+        throw new Error(`Failed to fetch file from S3\n\t${fileResponse.statusText}`);
       }
-      const fileSize = fileResponse.headers.get('Content-Length')
+      const fileSize = fileResponse.headers.get("Content-Length");
 
       response.writeHead(200, {
         "Content-Type": "application/octet-stream",
         "Content-Length": fileSize || "",
       });
 
-      const fileURL = 
-        JSON.parse(await readStreamAsText(fileResponse.body)).result;
-      const s3Response = await fetch(fileURL)
+      const fileURL = JSON.parse(
+        await readStreamAsText(fileResponse.body)
+      ).result;
+      const s3Response = await fetch(fileURL);
 
       const reader = s3Response.body?.getReader();
       const stream = new ReadableStream({
         async start(controller) {
-          if(!reader) return;
+          if (!reader) return;
 
           while (true) {
             const { done, value } = await reader.read();
@@ -44,7 +42,7 @@ export default async function handler(
             }
             controller.enqueue(value);
           }
-        }
+        },
       });
 
       const streamReader = stream.getReader();
@@ -56,7 +54,7 @@ export default async function handler(
         }
         response.write(value);
       }
-      response.end()
+      response.end();
     } catch (err) {
       console.error(err);
       response.status(500).json({ message: "File could not be read" });
