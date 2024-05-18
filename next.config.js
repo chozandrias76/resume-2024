@@ -1,6 +1,9 @@
 const {version, name} = require("./package.json");
 
 module.exports = {
+  experimental: {
+    instrumentationHook: true
+  },
   env: {
     version,
     name

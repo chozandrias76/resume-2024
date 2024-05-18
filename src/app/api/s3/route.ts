@@ -1,7 +1,6 @@
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
     const url = new URL(request.url, `http://localhost`);
@@ -21,9 +20,9 @@ export async function GET(request: Request) {
   
     try {
       const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 }); // URL valid for 1 hour
-      return NextResponse.json({result: signedUrl}, {status: 200})
-    } catch (error) {
+      return Response.json({result: signedUrl}, {status: 200})
+    } catch (error: any) {
       console.error("Error getting presigned URL", error);
-      return NextResponse.json({error}, {status: 500})
+      return Response.json({error: error.message}, {status: 500})
     }
 }
