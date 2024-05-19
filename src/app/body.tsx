@@ -12,10 +12,12 @@ import astroIcon from "../../public/astronaut.svg";
 import alienIcon from "../../public/alien.svg";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 import { Sparkles } from '@react-three/drei'
+import Wasm from "./wasm";
 
 const name = process.env.name?.replaceAll("-", " ");
 const stdSVGSize = 16;
 const developerTimezone = "America/Los_Angeles";
+const wasmFeatureEnabled = false;
 
 async function fetchAndParseModel(url: string) {
   const response = await fetch(url);
@@ -211,6 +213,7 @@ export default function Body() {
           </h1>
         </div>
         <HeroCanvas modelUrl="/api/models?file_type=obj" />
+        {wasmFeatureEnabled ? <Wasm /> : <></>}
       </div>
     </Loading>
   );
