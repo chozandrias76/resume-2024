@@ -1,3 +1,0 @@
-[submodule "rust/er-save-file-readers"]
-	path = rust/er-save-file-readers
-	url = https://github.com/chozandrias76/ER-Save-File-Readers
