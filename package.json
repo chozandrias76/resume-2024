@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "aws s3 sync s3://swensonhcp-resume-website/wasm ./public/wasm",
+    "postinstall": "node sync-s3.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -25,6 +25,7 @@
     "aws-crt": "^1.19.0",
     "aws-sdk": "^2.1497.0",
     "dd-trace": "^5.13.0",
+    "dotenv": "^16.4.5",
     "encoding": "^0.1.13",
     "kysely": "^0.27.3",
     "next": "14.2.3",
