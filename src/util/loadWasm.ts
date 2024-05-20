@@ -1,4 +1,4 @@
-import init, * as wasm from "../../rust/er-save-file-readers/pkg/er_save_file_readers";
+import init, * as wasm from "../../public/wasm";
 
 export async function loadWasm() {
   await init();

@@ -3,26 +3,35 @@ import { fromNodeProviderChain } from "@aws-sdk/credential-providers";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 export async function GET(request: Request) {
-    const url = new URL(request.url, `http://localhost`);
-    const queryParams = url.searchParams;
+  const url = new URL(request.url, `http://localhost`);
+  const queryParams = url.searchParams;
 
-    // Accessing the query parameters
-    const bucketName = queryParams.get('bucket_name') || "";
-    const objectKey = queryParams.get('object_key') || "";
-    
-    const credentials = fromNodeProviderChain();
-    const s3Client = new S3Client({ credentials });
+  // Accessing the query parameters
+  const bucketName = queryParams.get("bucket_name") || "";
+  const objectKey = queryParams.get("object_key") || "";
+  const contentType = request.headers.get("Content-Type");
 
-    const command = new GetObjectCommand({
-      Bucket: bucketName,
-      Key: objectKey,
-    });
-  
-    try {
-      const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 }); // URL valid for 1 hour
-      return Response.json({result: signedUrl}, {status: 200})
-    } catch (error: any) {
-      console.error("Error getting presigned URL", error);
-      return Response.json({error: error.message}, {status: 500})
+  const credentials = fromNodeProviderChain();
+  const s3Client = new S3Client({ credentials });
+
+  const command = new GetObjectCommand({
+    Bucket: bucketName,
+    Key: objectKey,
+  });
+
+  try {
+    const signedUrl = await getSignedUrl(s3Client, command, {
+      expiresIn: 3600,
+    }); // URL valid for 1 hour
+    const headers = new Headers();
+
+    // Set Content-Type header if provided in request headers
+    if (contentType) {
+      headers.set("Content-Type", contentType);
     }
+    return Response.json({ result: signedUrl }, { status: 200, headers});
+  } catch (error: any) {
+    console.error("Error getting presigned URL", error);
+    return Response.json({ error: error.message }, { status: 500 });
+  }
 }
