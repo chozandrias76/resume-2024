@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build:wasm": "cd rust/er-save-file-readers && wasm-pack build --target web",
+    "build:wasm": "cd rust/er-save-file-readers && npx wasm-pack build --target web",
     "postinstall": "npm run build:wasm",
     "watch:wasm": "node scripts/watch-wasm.js",
     "dev": "next dev",
@@ -47,6 +47,7 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "tsx": "^4.9.3",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wasm-pack": "^0.12.1"
   }
 }
