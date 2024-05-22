@@ -6,7 +6,7 @@ import Loading from "./loading";
 import { Home } from "./pages/home/home";
 import { motion, useAnimation } from "framer-motion";
 import { CTA } from "./pages/cta/cta";
-const sections = [<Home />, <CTA />];
+const sections = [<Home key={0}/>, <CTA key={1}/>];
 
 export default function Body() {
   const controls = useAnimation();
