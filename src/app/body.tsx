@@ -1,11 +1,16 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 
 import { usePresignedImageUrl } from "@/hooks/usePresignedImageUrl";
 import Loading from "./loading";
-import {Home} from "./pages/home/home";
+import { Home } from "./pages/home/home";
+import { motion, useAnimation } from "framer-motion";
+import { CTA } from "./pages/cta/cta";
+const sections = [<Home key={0}/>, <CTA key={1}/>];
 
 export default function Body() {
+  const controls = useAnimation();
+
   const { data, isLoading, isFetched, isFetching, isRefetching, isSuccess } =
     usePresignedImageUrl("banner");
 
@@ -18,8 +23,17 @@ export default function Body() {
       content={data}
       isSuccess={isSuccess}
     >
-      <div className="z-10 w-full items-center justify-between roboto text-xs lg:flex">
-        <Home />
+      <div className="z-10 w-full items-center justify-between roboto text-xs lg:flex flex-col">
+        {sections.map((section, index) => (
+          <motion.div
+            id="motion"
+            key={index}
+            className="flex w-full items-center justify-center"
+            animate={controls}
+          >
+            {section}
+          </motion.div>
+        ))}
       </div>
     </Loading>
   );
