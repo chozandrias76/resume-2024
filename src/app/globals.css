@@ -31,3 +31,23 @@ body {
     text-wrap: balance;
   }
 }
+
+@keyframes wave {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+@keyframes peel-away-bottom-right {
+  0% {
+    transform: translate(0, 0) scale(1);
+    transform-origin: bottom right;
+  }
+  100% {
+    transform: translate(100%, -100%) scale(0);
+    transform-origin: bottom right;
+  }
+}
+
+.peel-away-bottom-right {
+  animation: peel-away-bottom-right 1s forwards;
+}
