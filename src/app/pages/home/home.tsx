@@ -24,7 +24,7 @@ export function Home() {
             Engineer
           </h1>
         </div>
-        <HeroCanvas modelUrl="/api/models?file_type=obj" />
+        <HeroCanvas />
         {wasmFeatureEnabled ? <Wasm /> : <></>}
       </div>
     </>
