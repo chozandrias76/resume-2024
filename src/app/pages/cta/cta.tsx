@@ -28,7 +28,7 @@ function CTAItem({
     ...rootClassNameRight
   );
   return (
-    <a href={href} className={rootClassName}>
+    <a href={href} className={rootClassName} target="_blank">
       <h2 className="relative z-20 inset-x-[1rem] inset-y-[1rem] md:inset-x-[-4rem] md:inset-y-[-4rem] 2xl:text-[3.5rem] xl:text-[2.5rem] md:text-[2rem] sm:text-[1.4rem] text-[1.0rem]">
         {title}
       </h2>
@@ -59,6 +59,7 @@ export function CTA() {
         </h1>
       </div>
       <CTAItem
+        href="/elden-ring"
         src="/cta/elden-ring.jpg"
         description="Character Creator, Video Content, and Build Guides"
         title="Elden Ring Content Feed"
@@ -66,6 +67,7 @@ export function CTA() {
       />
       <CTAItem
         src="/cta/officiant.jpg"
+        href="https://theamm.org/"
         description="A non-profit non-denominational church that ordains people online so that they can officiate weddings for friends, family, and community"
         title="American Marriage Ministries"
         right
@@ -73,6 +75,7 @@ export function CTA() {
       />
       <CTAItem
         src="/cta/nzero.jpg"
+        href="https://public.nzero.com/reno/"
         description="Emissions Capture, Tracking, Display, and Forecasting"
         title="nZero for The City of Reno"
         count={3}
