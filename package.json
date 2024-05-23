@@ -29,6 +29,8 @@
     "dotenv": "^16.4.5",
     "encoding": "^0.1.13",
     "framer-motion": "^11.2.6",
+    "google-auth-library": "^9.10.0",
+    "googleapis": "^137.1.0",
     "kysely": "^0.27.3",
     "next": "14.2.3",
     "react": "^18",
