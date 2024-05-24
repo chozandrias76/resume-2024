@@ -2,8 +2,7 @@ import https from "node:https";
 import { Kysely, PostgresDialect } from "kysely";
 import { createPool } from "@vercel/postgres";
 import { config } from "dotenv";
-import cron from 'node-cron';
-
+import cron from "node-cron";
 
 config({ path: ".env.development.local" });
 
@@ -72,6 +71,9 @@ function fetchJson(url) {
 }
 
 async function insertAPIData(data) {
+  if (!data) {
+    throw new Error("Cannot write data as it is undefined or null");
+  }
   return await db
     .insertInto("api_data")
     .values({
@@ -97,7 +99,7 @@ async function fetchAndStoreApiData() {
     const result = await fetchJson(route(pageNumber));
     // Since page size is always one, we can always skip other array elements
     insertAPIData(result.data[0]);
-    
+
     const pageMax = result.pagination.total;
     while (pageMax >= pageNumber) {
       pageNumber++;
@@ -117,4 +119,4 @@ async function fetchAndStoreApiData() {
 await fetchAndStoreApiData();
 
 // Schedule the CRON job to run every day at midnight
-cron.schedule('0 0 * * *', fetchAndStoreApiData);
+cron.schedule("0 0 * * *", fetchAndStoreApiData);
