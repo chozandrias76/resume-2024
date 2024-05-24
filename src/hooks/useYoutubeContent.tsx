@@ -1,7 +1,7 @@
 import { IThumbnail } from "@/util/getYoutubeContent";
 import { UseQueryResult, useQuery } from "react-query";
 
-interface IYoutubeContent {
+export interface IYoutubeContent {
   result?: IThumbnail[];
   nextPageToken?: string;
   prevPageToken?: string;

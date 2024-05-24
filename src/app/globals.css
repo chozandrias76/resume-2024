@@ -163,3 +163,28 @@ body {
     transform: translateX(-8px) translateY(8px);
   }
 }
+
+.video-player {
+  max-width: 1280px;
+  max-height: 720px;
+  @media (max-width: 2320px) {
+    max-width: 1024px;
+    max-height: 576px;
+  }
+  @media (max-width: 2060px) {
+    max-width: 800px;
+    max-height: 450px;
+  }
+  @media (max-width: 1120px) {
+    max-width: 600px;
+    max-height: 450px;
+  }
+  @media (max-width: 800px) {
+    max-width: 500px;
+    max-height: 450px;
+  }
+  @media (max-width: 910px) {
+    max-width: 450px;
+    max-height: 450px;
+  }
+}
