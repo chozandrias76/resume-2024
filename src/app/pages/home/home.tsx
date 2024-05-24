@@ -2,9 +2,6 @@ import { MobileLocalGalaxy } from "./mobileLocalGalaxy";
 import { HeroCanvas } from "./hero";
 import { MobileMenuBar } from "./mobileMenuBar";
 import { DesktopMenuBar } from "./desktopMenuBar";
-import Wasm from "../../wasm";
-
-const wasmFeatureEnabled = false;
 
 export function Home() {
   return (
@@ -25,7 +22,6 @@ export function Home() {
           </h1>
         </div>
         <HeroCanvas />
-        {wasmFeatureEnabled ? <Wasm /> : <></>}
       </div>
     </>
   );

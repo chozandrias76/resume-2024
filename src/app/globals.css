@@ -33,8 +33,13 @@ body {
 }
 
 @keyframes wave {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.25); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
+  }
 }
 
 @keyframes peel-away-bottom-right {
@@ -50,4 +55,26 @@ body {
 
 .peel-away-bottom-right {
   animation: peel-away-bottom-right 1s forwards;
+}
+
+.elden-link:hover {
+  -webkit-animation: elden-link 1s cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation: elden-link 1s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@-webkit-keyframes elden-link {
+  0% {
+    filter: brightness(1);
+  }
+  100% {
+    filter: brightness(2);
+  }
+}
+@keyframes elden-link {
+  0% {
+    filter: brightness(1);
+  }
+  100% {
+    filter: brightness(2);
+  }
 }

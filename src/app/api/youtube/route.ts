@@ -15,12 +15,21 @@ const oauth2Client = new google.auth.OAuth2(clientId, clientSecret);
 oauth2Client.setCredentials({ refresh_token: refreshToken });
 
 const youtube = google.youtube({ version: "v3", auth: oauth2Client });
+export interface IThumbnail {
+  player: string | null | undefined;
+  description: string | null | undefined;
+  title: string | null | undefined;
+  thumbnailURL: string | null | undefined;
+}
 
-export async function GET(request: Request) {
+export async function GET(request: Request): Promise<Response> {
   const { searchParams } = new URL(request.url);
   // pageToken will be returned from the initial and subsequent responses where pages are present
-  const pageToken = searchParams.get("pageToken") || undefined
-  const pageSize = parseInt(searchParams.get("pageSize") || resultMax.toString(), 10);
+  const pageToken = searchParams.get("pageToken") || undefined;
+  const pageSize = parseInt(
+    searchParams.get("pageSize") || resultMax.toString(),
+    10
+  );
   const validPageSize = isNaN(pageSize) || pageSize < 1 ? resultMax : pageSize;
   try {
     const searchParams: youtube_v3.Params$Resource$Search$List = {
@@ -29,7 +38,7 @@ export async function GET(request: Request) {
       channelId,
       maxResults: validPageSize,
       order: "date",
-      pageToken
+      pageToken,
     };
     const search = await youtube.search.list(searchParams);
     const videoIDs = search.data.items?.map((item) => item.id?.videoId);
@@ -39,7 +48,6 @@ export async function GET(request: Request) {
       id: videoIDs as string[],
       part: ["snippet", "contentDetails", "player"],
       uploadType: "video",
-      
     };
 
     const videos = await youtube.videos.list(videoSearchParams);
@@ -55,11 +63,18 @@ export async function GET(request: Request) {
         description: item?.snippet?.description,
         title: item?.snippet?.title,
         thumbnailURL: item?.snippet?.thumbnails?.high?.url,
-      }));
+      } as IThumbnail));
 
-    return new Response(JSON.stringify({ nextPageToken: search.data.nextPageToken, prevPageToken: search.data.prevPageToken , result: thumbnails }), {
-      status: 200,
-    });
+    return new Response(
+      JSON.stringify({
+        nextPageToken: search.data.nextPageToken,
+        prevPageToken: search.data.prevPageToken,
+        result: thumbnails,
+      }),
+      {
+        status: 200,
+      }
+    );
   } catch (error: any) {
     console.error("Error getting videos", error);
     return new Response(JSON.stringify({ error: error.message }), {
