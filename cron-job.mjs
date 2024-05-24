@@ -116,7 +116,7 @@ async function fetchAndStoreApiData() {
   }
 }
 
-await fetchAndStoreApiData();
+if (process.env.RUN_CRON_JOB) await fetchAndStoreApiData();
 
-// Schedule the CRON job to run every day at midnight
+console.info("Scheduling CRON job for fetchAndStoreApiData at midnight");
 cron.schedule("0 0 * * *", fetchAndStoreApiData);
