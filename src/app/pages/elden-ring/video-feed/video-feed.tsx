@@ -1,6 +1,6 @@
 import { IYoutubeContent } from "@/hooks/useYoutubeContent";
 import { styles } from "@/util/styles";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 const titleStyles = [
   "text-left",
@@ -61,15 +61,21 @@ const nextLinkStyles = styles(
 
 export function VideoFeed({
   youtubeContent,
+  setPageToken
 }: {
-  youtubeContent: IYoutubeContent["result"];
+  youtubeContent?: IYoutubeContent;
+  setPageToken: React.Dispatch<React.SetStateAction<string>>
 }) {
-  const videoTitle = youtubeContent?.at(0)?.title;
+  const videoTitle = useMemo(
+    () => youtubeContent?.result?.at(0)?.title,
+    [youtubeContent]
+  );
+
 
   const ref = useRef(null);
   function playEmbed() {
     // References to at(0) will be updated when pagination is supported
-    if (!youtubeContent?.at(0)?.player) {
+    if (!youtubeContent?.result?.at(0)?.player) {
       return;
     }
     if (!ref.current) {
@@ -77,7 +83,8 @@ export function VideoFeed({
     }
     const currentRef: HTMLElement = ref.current;
     const tempContainer = document.createElement("div");
-    tempContainer.innerHTML = youtubeContent?.at(0)?.player?.embedHtml || "";
+    tempContainer.innerHTML =
+      youtubeContent?.result?.at(0)?.player?.embedHtml || "";
 
     // Get the iframe element and modify the src to include autoplay
     const iframeElement: HTMLElement = tempContainer.firstChild as HTMLElement;
@@ -94,9 +101,16 @@ export function VideoFeed({
     currentRef.replaceWith(iframeElement);
   }
 
+  function nextPage() {
+    if (!youtubeContent?.nextPageToken) {
+      return;
+    }
+    setPageToken(youtubeContent?.nextPageToken)
+  }
+
   useEffect(() => {
     // References to at(0) will be updated when pagination is supported
-    if (!youtubeContent?.at(0)?.thumbnailURL) {
+    if (!youtubeContent?.result?.at(0)?.thumbnailURL) {
       return;
     }
     if (!ref.current) {
@@ -105,7 +119,7 @@ export function VideoFeed({
     const currentRef: HTMLElement = ref.current;
 
     currentRef.style.backgroundImage = `url("${
-      youtubeContent?.at(0)?.thumbnailURL
+      youtubeContent?.result?.at(0)?.thumbnailURL
     }")`;
   }, [ref, youtubeContent]);
 
@@ -120,9 +134,7 @@ export function VideoFeed({
             <div className="absolute top-1/2 left-12 transform translate-x-1/2 text-base max-w-half">
               {videoTitle}
             </div>
-            <div className={nextLinkStyles}>
-              next
-            </div>
+            <div className={nextLinkStyles} onClickCapture={nextPage}>next</div>
             <div ref={ref} className={videoContainerStyles}>
               <span
                 className="text-7xl elden-link text-zinc-600 cursor-pointer"
