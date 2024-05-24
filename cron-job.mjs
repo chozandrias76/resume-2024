@@ -101,7 +101,7 @@ async function fetchAndStoreApiData() {
     insertAPIData(result.data[0]);
 
     const pageMax = result.pagination.total;
-    while (pageMax >= pageNumber) {
+    while (pageMax > pageNumber) {
       pageNumber++;
 
       console.info("GET ", route(pageNumber));
