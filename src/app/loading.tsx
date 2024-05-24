@@ -73,7 +73,7 @@ export default function Loading({
   isFetching: boolean;
   isRefetching: boolean;
   isSuccess: boolean;
-  content: string | undefined;
+  content?: any;
 }>) {
   const [isReady, setIsReady] = useState(false);
   const [shouldRender, setShouldRender] = useState(true);
