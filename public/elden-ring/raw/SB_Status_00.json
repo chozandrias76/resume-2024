@@ -1,0 +1,37 @@
+{
+  "standards": [
+    {
+      "margin": 1,
+      "padding": 2,
+      "width": 38,
+      "height": 38
+    }
+  ],
+  "definitions": [
+    {
+      "endurance": {
+        "x": 10,
+        "y": 6
+      }
+    },
+    {
+      "enduranceTransparent": {
+        "x": 12,
+        "y": 9
+      }
+    },
+    {
+      "invader": {
+        "x": 10,
+        "y": 10
+      }
+    }
+,
+    {
+      "cooperator": {
+        "x": 8,
+        "y": 2
+      }
+    }
+  ]
+}
