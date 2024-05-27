@@ -1,4 +1,5 @@
 import { IYoutubeContent } from "@/hooks/useYoutubeContent";
+import { IThumbnail } from "@/util/getYoutubeContent";
 import { styles } from "@/util/styles";
 import { useEffect, useMemo, useRef } from "react";
 
@@ -61,13 +62,17 @@ const nextLinkStyles = styles(
 
 export function VideoFeed({
   youtubeContent,
-  setPageToken
+  setPageToken,
+  nextPageToken,
+  prevPageToken
 }: {
-  youtubeContent?: IYoutubeContent;
+  youtubeContent?: IThumbnail;
   setPageToken: React.Dispatch<React.SetStateAction<string>>
+  nextPageToken?: string;
+  prevPageToken?: string;
 }) {
   const videoTitle = useMemo(
-    () => youtubeContent?.result?.at(0)?.title,
+    () => youtubeContent?.title,
     [youtubeContent]
   );
 
@@ -75,7 +80,7 @@ export function VideoFeed({
   const ref = useRef(null);
   function playEmbed() {
     // References to at(0) will be updated when pagination is supported
-    if (!youtubeContent?.result?.at(0)?.player) {
+    if (!youtubeContent?.player) {
       return;
     }
     if (!ref.current) {
@@ -84,7 +89,7 @@ export function VideoFeed({
     const currentRef: HTMLElement = ref.current;
     const tempContainer = document.createElement("div");
     tempContainer.innerHTML =
-      youtubeContent?.result?.at(0)?.player?.embedHtml || "";
+      youtubeContent?.player.embedHtml || "";
 
     // Get the iframe element and modify the src to include autoplay
     const iframeElement: HTMLElement = tempContainer.firstChild as HTMLElement;
@@ -102,15 +107,15 @@ export function VideoFeed({
   }
 
   function nextPage() {
-    if (!youtubeContent?.nextPageToken) {
+    if (!nextPageToken) {
       return;
     }
-    setPageToken(youtubeContent?.nextPageToken)
+    setPageToken(nextPageToken)
   }
 
   useEffect(() => {
     // References to at(0) will be updated when pagination is supported
-    if (!youtubeContent?.result?.at(0)?.thumbnailURL) {
+    if (!youtubeContent?.thumbnailURL) {
       return;
     }
     if (!ref.current) {
@@ -119,7 +124,7 @@ export function VideoFeed({
     const currentRef: HTMLElement = ref.current;
 
     currentRef.style.backgroundImage = `url("${
-      youtubeContent?.result?.at(0)?.thumbnailURL
+      youtubeContent?.thumbnailURL
     }")`;
   }, [ref, youtubeContent]);
 
