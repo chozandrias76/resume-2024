@@ -98,7 +98,6 @@ export function Guide({
       ...imageDefinitions.standards[0],
       ...(definitionAttributes[definitionKey] || {}),
     };
-    console.log(imageConfig);
 
     const canvas = canvasRef.current;
     canvas.width = 1024;
