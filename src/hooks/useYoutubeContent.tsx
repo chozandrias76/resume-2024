@@ -1,4 +1,4 @@
-import { IThumbnail } from "@/app/api/youtube/route";
+import { IThumbnail } from "@/util/getYoutubeContent";
 import { UseQueryResult, useQuery } from "react-query";
 
 interface IYoutubeContent {
@@ -11,7 +11,7 @@ export const useYoutubeContent = (pageToken: string): UseQueryResult<IYoutubeCon
   return useQuery(
     ["youtubeContent", pageToken],
     async () => {
-      const endpointResponse = await fetch("/api/youtube");
+      const endpointResponse = await fetch("/api/youtube", {cache: "force-cache"});
       const endpointResponseValue = await endpointResponse.text();
       const data: IYoutubeContent = JSON.parse(endpointResponseValue);
       return data;
