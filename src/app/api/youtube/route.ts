@@ -44,8 +44,17 @@ export async function GET(request: Request): Promise<Response> {
     );
   } catch (error: any) {
     console.error("Error getting videos", error);
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
+    let errorMessage = "";
+    switch (error.response.status) {
+      case 500:
+        errorMessage = error.message;
+      case 403:
+        errorMessage = "Rate Limit for Youtube API exceeded";
+      default:
+        break;
+    }
+    return new Response(JSON.stringify({ error: errorMessage }), {
+      status: error.response.status,
     });
   }
 }

@@ -9,10 +9,12 @@ import { Guide } from "../pages/elden-ring/home/guide";
 import { useErApiData } from "@/hooks/useErApiData";
 import { useDDS } from "@/hooks/useDDS";
 import { useImageSchema } from "@/hooks/useImageSchema";
+import { VideoFeed } from "../pages/elden-ring/video-feed/video-feed";
 
 export default function Body() {
   const controls = useAnimation();
 
+  // pageToken will be used in pagination
   const [pageToken, setPageToken] = useState("");
   // Max build stub in until proper state setting works
   const [buildId, setBuildID] = useState("1d5af2758c4c42");
@@ -44,6 +46,7 @@ export default function Body() {
       <div className="z-10 items-center justify-between roboto text-xs lg:flex flex-col">
         {[
           <Home key={0} />,
+          <VideoFeed key={1} nextPageToken={youtubeContent?.nextPageToken} prevPageToken={youtubeContent?.prevPageToken} youtubeContent={(youtubeContent?.result || []).at(0)} setPageToken={setPageToken} />,
           guideContent?.data &&
           guideImageText &&
           typescriptDefinitions &&

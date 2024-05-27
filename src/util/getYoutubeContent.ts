@@ -14,7 +14,7 @@ oauth2Client.setCredentials({ refresh_token: refreshToken });
 const youtube = google.youtube({ version: "v3", auth: oauth2Client });
 
 export interface IThumbnail {
-  player: string | null | undefined;
+  player: { embedHtml: string | null | undefined };
   description: string | null | undefined;
   title: string | null | undefined;
   thumbnailURL: string | null | undefined;
@@ -33,7 +33,7 @@ export async function getYoutubeContent({
     channelId,
     maxResults: validPageSize,
     order: "date",
-    ...(pageToken && { pageToken })
+    ...(pageToken && { pageToken }),
   };
   const search = await youtube.search.list(searchParams);
   const videoIDs = search.data.items?.map((item) => item.id?.videoId);
