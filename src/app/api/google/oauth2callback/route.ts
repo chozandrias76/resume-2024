@@ -18,8 +18,8 @@ export async function GET(request: Request) {
 
     // Store tokens securely
     // You can store tokens in a database or environment variables
-    console.log("Access Token:", tokens.access_token);
-    console.log("Refresh Token:", tokens.refresh_token);
+    // console.log("Access Token:", tokens.access_token);
+    // console.log("Refresh Token:", tokens.refresh_token);
 
     return new Response('Authentication successful! You can close this tab.', { status: 200 });
   } catch (error) {

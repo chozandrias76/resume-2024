@@ -4,6 +4,7 @@
     "elden",
     "Gaxios",
     "Kysely",
-    "nzero"
+    "nzero",
+    "Titleize"
   ]
 }

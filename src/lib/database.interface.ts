@@ -1,5 +1,7 @@
+import type { ERApiData } from "./erApiData.interface";
+
 export interface IDatabase {
-  getImageKeyByName: (name: string) => Promise<{image_key: string}> 
+  getImageKeyByName: (name: string) => Promise<{ image_key: string }>;
 }
 
 interface ImageTable {
@@ -14,6 +16,12 @@ interface BioTable {
   created_at: string;
 }
 
+interface ApiDataTable {
+  api_id: string;
+  data: ERApiData;
+  updated_at: Date;
+}
+
 interface ExperienceTable {
   company: string;
   title: string;
@@ -22,6 +30,7 @@ interface ExperienceTable {
 }
 
 export interface Database {
+  api_data: ApiDataTable;
   image_store: ImageTable;
   bio: BioTable;
   experience: ExperienceTable;
