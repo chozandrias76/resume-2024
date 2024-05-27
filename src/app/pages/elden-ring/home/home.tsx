@@ -22,13 +22,13 @@ const titleStyles = [
 export function Home() {
   return (
     <>
-      <div className="w-full flex flex-col flex-grow relative">
+      <div className="w-full flex flex-col flex-grow relative h-screen">
         <div className="leading-none uppercase w-full font-bold px-4 mx-auto lg:mt-10 mt-12 md:flex md:flex-col md:flex-grow">
           <h1 className={styles(titleStyles)}>Elden Ring</h1>
           <a className={styles(...titleStyles, "elden-link", "text-zinc-600", "ml-16")} href="#">
             Feed &#x219A;
           </a>
-          <a className={styles(...titleStyles, "elden-link", "text-zinc-600", "ml-32")} href="#">
+          <a className={styles(...titleStyles, "elden-link", "text-zinc-600", "ml-32")} href="#guide">
             Guide &#x219A;
           </a>
           <a className={styles(...titleStyles, "elden-link", "text-zinc-600", "ml-64")} href="#">

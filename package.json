@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "glob -c \"tsx --test\" \"./src/**/*.test.ts\"",
-    "cron:sync": "node ./cron-job.mjs"
+    "cron:sync": "node ./cron-job.mjs",
+    "generate:types:fromJson": "npx json-schema-to-typescript .\\public\\elden-ring\\raw\\schema.json -o .\\src\\types\\schemaTypes.d.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.569.0",
@@ -23,10 +24,12 @@
     "@vercel/otel": "^1.8.2",
     "@vercel/postgres": "^0.8.0",
     "@vercel/postgres-kysely": "^0.8.0",
+    "ajv": "^8.14.0",
     "aws-crt": "^1.19.0",
     "aws-sdk": "^2.1497.0",
     "clsx": "^2.1.1",
     "dd-trace": "^5.13.0",
+    "dds-ktx-parser": "^1.0.1",
     "dotenv": "^16.4.5",
     "encoding": "^0.1.13",
     "framer-motion": "^11.2.6",

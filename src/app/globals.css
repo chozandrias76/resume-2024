@@ -62,6 +62,12 @@ body {
   animation: elden-link 1s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
 
+.pop-out-hard-shadow:hover {
+  -webkit-animation: pop-out-hard-shadow 0.3s
+    cubic-bezier(0.47, 0, 0.745, 0.715) both;
+  animation: pop-out-hard-shadow 0.3s cubic-bezier(0.47, 0, 0.745, 0.715) both;
+}
+
 @-webkit-keyframes elden-link {
   0% {
     filter: brightness(1);
@@ -76,5 +82,84 @@ body {
   }
   100% {
     filter: brightness(2);
+  }
+}
+
+@property --background-shadow-color {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #353642;
+}
+
+@-webkit-keyframes pop-out-hard-shadow {
+  0% {
+    -webkit-box-shadow: 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color), 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color), 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color), 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color);
+    box-shadow: 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color), 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color), 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color), 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color);
+    -webkit-transform: translateX(0) translateY(0);
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    -webkit-box-shadow: 1px -1px var(--background-shadow-color),
+      2px -2px var(--background-shadow-color),
+      3px -3px var(--background-shadow-color),
+      4px -4px var(--background-shadow-color),
+      5px -5px var(--background-shadow-color),
+      6px -6px var(--background-shadow-color),
+      7px -7px var(--background-shadow-color),
+      8px -8px var(--background-shadow-color);
+    box-shadow: 1px -1px var(--background-shadow-color),
+      2px -2px var(--background-shadow-color),
+      3px -3px var(--background-shadow-color),
+      4px -4px var(--background-shadow-color),
+      5px -5px var(--background-shadow-color),
+      6px -6px var(--background-shadow-color),
+      7px -7px var(--background-shadow-color),
+      8px -8px var(--background-shadow-color);
+    -webkit-transform: translateX(-8px) translateY(8px);
+    transform: translateX(-8px) translateY(8px);
+  }
+}
+@keyframes pop-out-hard-shadow {
+  0% {
+    -webkit-box-shadow: 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color), 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color), 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color), 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color);
+    box-shadow: 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color), 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color), 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color), 0 0 var(--background-shadow-color),
+      0 0 var(--background-shadow-color);
+    -webkit-transform: translateX(0) translateY(0);
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    -webkit-box-shadow: 1px -1px var(--background-shadow-color),
+      2px -2px var(--background-shadow-color),
+      3px -3px var(--background-shadow-color),
+      4px -4px var(--background-shadow-color),
+      5px -5px var(--background-shadow-color),
+      6px -6px var(--background-shadow-color),
+      7px -7px var(--background-shadow-color),
+      8px -8px var(--background-shadow-color);
+    box-shadow: 1px -1px var(--background-shadow-color),
+      2px -2px var(--background-shadow-color),
+      3px -3px var(--background-shadow-color),
+      4px -4px var(--background-shadow-color),
+      5px -5px var(--background-shadow-color),
+      6px -6px var(--background-shadow-color),
+      7px -7px var(--background-shadow-color),
+      8px -8px var(--background-shadow-color);
+    -webkit-transform: translateX(-8px) translateY(8px);
+    transform: translateX(-8px) translateY(8px);
   }
 }
