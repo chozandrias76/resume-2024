@@ -39,7 +39,8 @@ const subTitleStyles = [
   "justify-start",
   "reveal",
   "relative",
-  "mt-2",
+  "mt-8",
+  "mb-4",
   "2xl:text-[5rem]",
   "xl:text-[4rem]",
   "lg:leading-[1]",
@@ -97,18 +98,15 @@ const PvE = ({
   children: React.ReactNode;
 }) => {
   const className = styles(captionStyles);
+  const text = `For ${isPvE ? "PvE" : "PvP"} Players`;
+
   return (
-    <div>
-      {isPvE ? (
-        <div className={className}>
-          For PvE Players<div>{children}</div>
-        </div>
-      ) : (
-        <div className={className}>
-          For PvP Players<div>{children}</div>
-        </div>
-      )}
-    </div>
+    <>
+      <div className={className}>
+        <p>{text}</p>
+        <div id="multiplayer-icon">{children}</div>
+      </div>
+    </>
   );
 };
 
@@ -136,7 +134,7 @@ const CharacterStats = ({ stats }: { stats: IStats }) => {
     <>
       <div className={styles("mb-4", ...statBlockStyles)}>
         <p className="mb-2">Rune Level: {stats.rl}</p>
-        <div className="grid grid-cols-4">
+        <div className="grid grid-cols-4 gap-2">
           {orderedStats.map((statKeys, idx) => {
             return (
               <p key={idx}>
@@ -153,8 +151,8 @@ const CharacterStats = ({ stats }: { stats: IStats }) => {
 function Resistances({ data }: { data: IResistances }) {
   return (
     <div>
-      Resistances:{" "}
-      <div className="grid grid-cols-2 mt-2">
+      <p>Resistances: </p>
+      <div className="grid grid-cols-2 mt-2 gap-2">
         {Object.keys(data).map((resistance, idx) => {
           return (
             <div className={styles(...statBlockStyles)} key={idx}>
@@ -173,7 +171,7 @@ function Defenses({ data }: { data: IDefenses }) {
   return (
     <div>
       <p>Defenses: </p>
-      <div className="grid grid-cols-4 mt-2">
+      <div className="grid grid-cols-4 mt-2 gap-2">
         {Object.keys(data).map((defense, idx) => {
           return (
             <div className={styles(...statBlockStyles)} key={idx}>
@@ -189,7 +187,7 @@ function Absorption({ data }: { data: IDefenses }) {
   return (
     <div>
       Absorption:{" "}
-      <div className="grid grid-cols-2 mt-2">
+      <div className="grid grid-cols-2 mt-2 gap-2">
         {Object.keys(data).map((defense, idx) => {
           return (
             <div className={styles(...statBlockStyles)} key={idx}>
@@ -302,13 +300,14 @@ const Inventory = ({ inventory }: { inventory: IInventory }) => {
   return (
     <>
       <h1 className={styles(subTitleStyles)}>Current Inventory</h1>
-      <div className="grid grid-cols-5 gap-2">
+      <div className={`grid grid-cols-${stdGridWidth} gap-3`}>
         {inventory.slots.map((slot, idx) => (
           <div
             key={idx}
-            className="h-48 text-center cursor-grab select-none border border-red-600 bg-no-repeat bg-center bg-cover flex items-center justify-center pop-out-hard-shadow"
+            className="aspect-square sm:h-24 md:h-36 lg:h-48 text-center cursor-grab select-none border border-red-600 bg-no-repeat bg-center bg-cover flex items-center justify-center pop-out-hard-shadow"
             style={{
-              backgroundImage: `url(${urlForName(slot.name)})`,
+              // Needs to be replaced with S3 retrieval or DDS
+              // backgroundImage: `url(${urlForName(slot.name)})`,
             }}
           >
             <p
@@ -326,37 +325,6 @@ const Inventory = ({ inventory }: { inventory: IInventory }) => {
       </div>
     </>
   );
-};
-
-interface SubImageConfig {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  margin: number;
-  padding: number;
-}
-
-interface SubImageDefinitions {
-  [key: string]: SubImageConfig;
-}
-
-const SB_Status_00_dds = {
-  margin: 1,
-  padding: 2,
-  width: 38,
-  height: 38,
-};
-
-const subImageDefinitions: SubImageDefinitions = {
-  image1: { x: 1, y: 1, ...SB_Status_00_dds },
-  image2: { x: 2, y: 1, ...SB_Status_00_dds },
-  blueBuff: { x: 3, y: 5, ...SB_Status_00_dds },
-  host: { x: 4, y: 5, ...SB_Status_00_dds },
-  paperTime: { x: 3, y: 10, ...SB_Status_00_dds },
-  endurance: { x: 10, y: 6, ...SB_Status_00_dds },
-  enduranceTransparent: { x: 12, y: 9, ...SB_Status_00_dds },
-  // Add more definitions as needed
 };
 
 function getSubImage(imageData: ImageData, config: any): ImageData | null {
@@ -466,11 +434,8 @@ export function Guide({
   ]);
 
   return (
-    <div
-      id="guide"
-      className=" flex flex-col flex-grow relative h-screen"
-    >
-      <div className="leading-none uppercase w-full font-bold px-4 mx-auto lg:mt-10 mt-12 md:flex md:flex-col md:flex-grow">
+    <div id="guide" className="flex flex-col flex-grow relative h-screen">
+      <div className="leading-none uppercase font-bold px-4 mx-auto lg:mt-10 mt-12 md:flex md:flex-col md:flex-grow">
         <h1 className={styles(titleStyles)}>Build Guides</h1>
         <CharacterName name={name} />
         <PvE isPvE={isPvE}>

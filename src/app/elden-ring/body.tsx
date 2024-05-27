@@ -41,7 +41,7 @@ export default function Body() {
       content={youtubeContent}
       isSuccess={isSuccess}
     >
-      <div className="z-10 w-full items-center justify-between roboto text-xs lg:flex flex-col">
+      <div className="z-10 items-center justify-between roboto text-xs lg:flex flex-col">
         {[
           <Home key={0} />,
           guideContent?.data &&
