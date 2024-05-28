@@ -29,9 +29,18 @@ interface ExperienceTable {
   end_date: string;
 }
 
+interface YoutubeDataTable {
+  id: string;
+  thumbnail_url: string;
+  title: string;
+  embed_html: string;
+  description: string;
+}
+
 export interface Database {
   api_data: ApiDataTable;
   image_store: ImageTable;
   bio: BioTable;
   experience: ExperienceTable;
+  youtube_data: YoutubeDataTable;
 }

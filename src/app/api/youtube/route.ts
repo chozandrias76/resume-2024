@@ -1,24 +1,29 @@
-import { getYoutubeContent } from "@/util/getYoutubeContent";
+import { KyselyDatabase } from "@/lib/database";
 
-// I found a post on StackOverflow that suggested 10. Seems reasonable
 const resultMax = 10;
 
 export async function GET(request: Request): Promise<Response> {
-  if(!request.url && !URL.canParse(request.url)) return new Response(JSON.stringify({ error: "Unable to perform request without initiating URL" }), { status: 500 });
+  if (!request.url && !URL.canParse(request.url))
+    return new Response(
+      JSON.stringify({
+        error: "Unable to perform request without initiating URL",
+      }),
+      { status: 500 }
+    );
   const { searchParams } = new URL(request.url);
   // pageToken will be returned from the initial and subsequent responses where pages are present
-  const pageToken = searchParams.get("pageToken");
+  const page = parseInt(searchParams.get("page") || "0", 10);
   const pageSize = parseInt(
     searchParams.get("pageSize") || resultMax.toString(),
     10
   );
   const validPageSize = isNaN(pageSize) || pageSize < 1 ? resultMax : pageSize;
-  
+
   try {
-    const youtubeContent = await getYoutubeContent({
-      validPageSize,
-      pageToken,
-    });
+    const youtubeContent = await KyselyDatabase.getInstance().getYoutubeData(
+      page,
+      validPageSize
+    );
 
     if (!youtubeContent) {
       return new Response(JSON.stringify({ error: "No content found" }), {
@@ -26,36 +31,13 @@ export async function GET(request: Request): Promise<Response> {
       });
     }
 
-    const {
-      thumbnails: result,
-      search: {
-        data: { nextPageToken, prevPageToken },
-      },
-    } = youtubeContent;
-
-    return new Response(
-      JSON.stringify({
-        nextPageToken,
-        prevPageToken,
-        result,
-      }),
-      {
-        status: 200,
-      }
-    );
+    return new Response(JSON.stringify({ result: youtubeContent }), {
+      status: 200,
+    });
   } catch (error: any) {
     console.error("Error getting videos", error);
-    let errorMessage = "";
-    switch (error.response.status) {
-      case 500:
-        errorMessage = error.message;
-      case 403:
-        errorMessage = "Rate Limit for Youtube API exceeded";
-      default:
-        break;
-    }
-    return new Response(JSON.stringify({ error: errorMessage }), {
-      status: error.response.status,
+    return new Response(JSON.stringify({ error }), {
+      status: 500,
     });
   }
 }

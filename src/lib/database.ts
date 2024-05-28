@@ -1,4 +1,9 @@
-import { Kysely } from "kysely";
+import {
+  ComparisonOperatorExpression,
+  Kysely,
+  ReferenceExpression,
+  sql,
+} from "kysely";
 import type { IDatabase, Database } from "./database.interface";
 import type { ERApiData } from "./erApiData.interface";
 import { createKysely } from "@vercel/postgres-kysely";
@@ -54,13 +59,41 @@ export class KyselyDatabase implements IDatabase {
     return experiences;
   }
 
-  async getInventoryById(
-    api_id: string
-  ): Promise<{data: ERApiData}> {
+  async getInventoryById(api_id: string): Promise<{ data: ERApiData }> {
     return await this.db
       .selectFrom("api_data")
       .select("data")
       .where((eb) => eb("api_id", "=", api_id))
       .executeTakeFirstOrThrow();
+  }
+
+  async getYoutubeData(
+    offset = 0,
+    limit = 1
+  ): Promise<{
+    data: Database["youtube_data"][];
+    length?: string | number | bigint;
+  }> {
+    const table = "youtube_data";
+    const { lhs, op, rhs } = {
+      lhs: "description" as ReferenceExpression<Database, "youtube_data">,
+      op: "like" as ComparisonOperatorExpression,
+      rhs: `%er-inventory.nyasu.business/?b=%`, // Filters out non-ER, non-build content
+    };
+    const data = await this.db
+      .selectFrom(table)
+      .where(lhs, op, rhs)
+      .selectAll()
+      .offset(offset)
+      .limit(limit)
+      .execute();
+
+    const length = await this.db
+      .selectFrom(table)
+      .where(lhs, op, rhs)
+      .select(({ fn }) => fn.count("id").as("count"))
+      .executeTakeFirst();
+
+    return { data, length: length?.count };
   }
 }

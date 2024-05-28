@@ -14,8 +14,7 @@ import { VideoFeed } from "../pages/elden-ring/video-feed/video-feed";
 export default function Body() {
   const controls = useAnimation();
 
-  // pageToken will be used in pagination
-  const [pageToken, setPageToken] = useState("");
+  const [page, setPage] = useState("0");
   // Max build stub in until proper state setting works
   const [buildId, setBuildID] = useState("1d5af2758c4c42");
   const {
@@ -25,7 +24,7 @@ export default function Body() {
     isFetching,
     isRefetching,
     isSuccess,
-  } = useYoutubeContent(pageToken);
+  } = useYoutubeContent(page);
   const { data: guideContent } = useErApiData(buildId);
   const { data: guideImageText } = useDDS("SB_Status_00.dds");
   const imageSchema = useImageSchema("SB_Status_00.json", "schema.json");
@@ -46,7 +45,13 @@ export default function Body() {
       <div className="z-10 items-center justify-between roboto text-xs lg:flex flex-col">
         {[
           <Home key={0} />,
-          <VideoFeed key={1} nextPageToken={youtubeContent?.nextPageToken} prevPageToken={youtubeContent?.prevPageToken} youtubeContent={(youtubeContent?.result || []).at(0)} setPageToken={setPageToken} />,
+          <VideoFeed
+            key={1}
+            thumbnail={{data: youtubeContent?.result?.data[0], length: youtubeContent?.result?.length || undefined}}
+            setPage={setPage}
+            page={page}
+            maxPage={youtubeContent?.result?.length || "0"}
+          />,
           guideContent?.data &&
           guideImageText &&
           typescriptDefinitions &&

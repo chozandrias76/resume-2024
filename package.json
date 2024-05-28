@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "postinstall": "node sync-s3.mjs",
-    "poststart": "node cron-job.mjs",
+    "poststart": "node cron-job.mjs && node sync-youtube.mjs",
+    "youtube:sync": "node sync-youtube.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

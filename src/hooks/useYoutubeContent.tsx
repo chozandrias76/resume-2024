@@ -1,17 +1,17 @@
 import { createOnError } from "@/util/createOnError";
-import { IThumbnail } from "@/util/getYoutubeContent";
 import { UseQueryResult, useQuery } from "react-query";
 
 export interface IYoutubeContent {
-  result?: IThumbnail[];
-  nextPageToken?: string;
-  prevPageToken?: string;
+  result?: {
+    data: [{id: string, embed_html: string, description: string, title: string, thumbnail_url: string}],
+    length?: string
+  };
 }
 
 /**
  * Custom hook to fetch YouTube content using React Query.
  *
- * @param {string} pageToken - The token for the next page of results. Pass an empty string for the first page.
+ * @param {string} page - The number for page of results. Pass "0" for the first page.
  *
  * @returns {UseQueryResult<IYoutubeContent>} - The result of the query containing the YouTube content data.
  *
@@ -38,28 +38,21 @@ export interface IYoutubeContent {
  * };
  *
  * export default YoutubeComponent;
- *
- * @see https://developers.google.com/youtube/v3/determine_quota_cost for details on rate limits.
- *
- * Rate Limits:
- * - `videos.list` endpoint: 1 unit per request.
- * - `search.list` endpoint: 100 units per request.
  */
 export const useYoutubeContent = (
-  pageToken: string
+  page: string
 ): UseQueryResult<IYoutubeContent> => {
   return useQuery(
-    ["youtubeContent", pageToken],
+    ["youtubeContent", page],
     async () => {
       try {
         const url = new URL("/api/youtube", window.location.origin);
-        if (pageToken) url.searchParams.append("pageToken", pageToken);
-        url.searchParams.append("pageSize", "2");
+        url.searchParams.append("page", page);
         const endpointResponse = await fetch(url.href, {
           cache: "force-cache",
         });
         const endpointResponseValue = await endpointResponse.text();
-        const data: IYoutubeContent = JSON.parse(endpointResponseValue);
+        const data = JSON.parse(endpointResponseValue);
         return data;
       } catch (error: any) {
         console.error(error);
