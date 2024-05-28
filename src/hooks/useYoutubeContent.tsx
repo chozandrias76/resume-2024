@@ -3,7 +3,7 @@ import { IThumbnail } from "@/util/getYoutubeContent";
 import { UseQueryResult, useQuery } from "react-query";
 
 export interface IYoutubeContent {
-  result?: IThumbnail[];
+  result?: IThumbnail;
   nextPageToken?: string;
   prevPageToken?: string;
 }
@@ -54,13 +54,15 @@ export const useYoutubeContent = (
       try {
         const url = new URL("/api/youtube", window.location.origin);
         if (pageToken) url.searchParams.append("pageToken", pageToken);
-        url.searchParams.append("pageSize", "2");
+        url.searchParams.append("pageSize", "1");
         const endpointResponse = await fetch(url.href, {
           cache: "force-cache",
         });
         const endpointResponseValue = await endpointResponse.text();
-        const data: IYoutubeContent = JSON.parse(endpointResponseValue);
-        return data;
+        const data = JSON.parse(endpointResponseValue);
+        // This endpoint should only return one result
+        data.result = data.result?.at(0);
+        return data as IYoutubeContent;
       } catch (error: any) {
         console.error(error);
         return undefined;

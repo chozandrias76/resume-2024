@@ -46,7 +46,13 @@ export default function Body() {
       <div className="z-10 items-center justify-between roboto text-xs lg:flex flex-col">
         {[
           <Home key={0} />,
-          <VideoFeed key={1} nextPageToken={youtubeContent?.nextPageToken} prevPageToken={youtubeContent?.prevPageToken} youtubeContent={(youtubeContent?.result || []).at(0)} setPageToken={setPageToken} />,
+          <VideoFeed
+            key={1}
+            nextPageToken={youtubeContent?.nextPageToken}
+            prevPageToken={youtubeContent?.prevPageToken}
+            youtubeContent={youtubeContent?.result}
+            setPageToken={setPageToken}
+          />,
           guideContent?.data &&
           guideImageText &&
           typescriptDefinitions &&
