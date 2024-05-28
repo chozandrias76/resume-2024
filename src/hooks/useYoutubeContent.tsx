@@ -49,14 +49,20 @@ export const useYoutubeContent = (pageToken: string): UseQueryResult<IYoutubeCon
   return useQuery(
     ["youtubeContent", pageToken],
     async () => {
-      const url = new URL("/api/youtube")
-      if (pageToken)
-        url.searchParams.append("pageToken", pageToken);
-      url.searchParams.append("pageSize", "2");
-      const endpointResponse = await fetch(url.href, {cache: "force-cache"});
-      const endpointResponseValue = await endpointResponse.text();
-      const data: IYoutubeContent = JSON.parse(endpointResponseValue);
-      return data;
+      try {
+        const url = new URL("/api/youtube")
+        if (pageToken)
+          url.searchParams.append("pageToken", pageToken);
+        url.searchParams.append("pageSize", "2");
+        const endpointResponse = await fetch(url.href, {cache: "force-cache"});
+        const endpointResponseValue = await endpointResponse.text();
+        const data: IYoutubeContent = JSON.parse(endpointResponseValue);
+        return data;
+      } catch (error: any) {
+        console.error(error);
+        return undefined;
+      }
+      
     },
     {
       onError: createOnError(),
