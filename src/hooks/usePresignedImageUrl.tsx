@@ -1,5 +1,6 @@
 import { useQuery, UseQueryResult } from "react-query";
 import { readStreamAsText } from "@/util/readStreamAsText";
+import { createOnError } from "@/util/createOnError";
 
 export const usePresignedImageUrl = (imageName: string): UseQueryResult<string> => {
   return useQuery(
@@ -22,10 +23,8 @@ export const usePresignedImageUrl = (imageName: string): UseQueryResult<string> 
       return JSON.parse(await readStreamAsText(imageURL)).result;
     },
     {
-      // Configure options here, such as cache time.
-      staleTime: 3600 * 1000, // 1 hour, same as URL expiration
-      cacheTime: 3600 * 1000,
-      onError: (error) => console.error("Error fetching presigned URL", error),
+      onError: createOnError(),
+      refetchOnWindowFocus: false,
     }
   );
 };

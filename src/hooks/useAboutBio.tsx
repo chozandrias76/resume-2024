@@ -1,3 +1,4 @@
+import { createOnError } from "@/util/createOnError";
 import { UseQueryResult, useQuery } from "react-query";
 
 
@@ -8,6 +9,9 @@ export const useAboutBio = (): UseQueryResult<string> => {
       const {result: bio} = JSON.parse(await (await fetch("/api/bios")).text())
       return bio;
     },
-    {onError: (error) => console.error("Error fetching presigned URL", error),}
+    {
+      onError: createOnError(),
+      refetchOnWindowFocus: false,
+    }
   )
 }

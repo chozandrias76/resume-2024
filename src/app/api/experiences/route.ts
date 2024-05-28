@@ -1,6 +1,4 @@
 import { KyselyDatabase } from "@/lib/database";
-import { Database } from "@/lib/database.interface";
-import { createKysely } from "@vercel/postgres-kysely";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
@@ -8,7 +6,7 @@ export async function GET(request: Request) {
   const queryParams = url.searchParams;
   const positions = queryParams.get("positions");
 
-  const database = new KyselyDatabase(createKysely<Database>());
+  const database = KyselyDatabase.getInstance();
 
   try {
     if (positions === null) {

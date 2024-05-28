@@ -1,3 +1,4 @@
+import { createOnError } from "@/util/createOnError";
 import { Schema } from "ajv";
 import { UseQueryResult, useQuery } from "react-query";
 /**
@@ -39,6 +40,9 @@ export const useImageSchema = (
       const json = JSON.parse(result);
       return json;
     },
-    { onError: (error) => console.error("Error fetching image schema", error) }
+    {
+      onError: createOnError(),
+      refetchOnWindowFocus: false,
+    }
   );
 };

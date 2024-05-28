@@ -1,3 +1,4 @@
+import { createOnError } from "@/util/createOnError";
 import { UseQueryResult, useQuery } from "react-query";
 
 export const useRGBABase64String = (encodedString: string): UseQueryResult<Uint8ClampedArray  | undefined> => {
@@ -8,6 +9,9 @@ export const useRGBABase64String = (encodedString: string): UseQueryResult<Uint8
       return Uint8ClampedArray.from(atob(encodedString), c => c.charCodeAt(0));
 
     },
-    {onError: (error) => console.error("Error fetching RGBABase64String", error),}
+    {
+      onError: createOnError(),
+      refetchOnWindowFocus: false,
+    }
   )
 }

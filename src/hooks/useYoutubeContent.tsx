@@ -1,3 +1,4 @@
+import { createOnError } from "@/util/createOnError";
 import { IThumbnail } from "@/util/getYoutubeContent";
 import { UseQueryResult, useQuery } from "react-query";
 
@@ -57,6 +58,9 @@ export const useYoutubeContent = (pageToken: string): UseQueryResult<IYoutubeCon
       const data: IYoutubeContent = JSON.parse(endpointResponseValue);
       return data;
     },
-    { onError: (error) => console.error("Error fetching Youtube Content", error) }
+    {
+      onError: createOnError(),
+      refetchOnWindowFocus: false,
+    }
   );
 };

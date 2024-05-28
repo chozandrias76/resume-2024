@@ -1,6 +1,4 @@
 import { KyselyDatabase } from "@/lib/database";
-import type { Database } from "@/lib/database.interface";
-import { createKysely } from "@vercel/postgres-kysely";
 
 export async function GET(request: Request) {
   const requestURL = new URL(request.url);
@@ -12,7 +10,7 @@ export async function GET(request: Request) {
         "This endpoint is not functional without an build ID, 'b'. This can be found in your build URL, following 'b='"
       );
     }
-    const database = new KyselyDatabase(createKysely<Database>());
+    const database = KyselyDatabase.getInstance();
 
     const inventory = await database.getInventoryById(buildID);
 
