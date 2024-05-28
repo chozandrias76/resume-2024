@@ -49,7 +49,7 @@ export const useYoutubeContent = (pageToken: string): UseQueryResult<IYoutubeCon
   return useQuery(
     ["youtubeContent", pageToken],
     async () => {
-      const url = new URL("/api/youtube", process.env.NEXT_PUBLIC_API_URL)
+      const url = new URL("/api/youtube")
       if (pageToken)
         url.searchParams.append("pageToken", pageToken);
       url.searchParams.append("pageSize", "2");
