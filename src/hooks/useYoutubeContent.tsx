@@ -50,7 +50,7 @@ export const useYoutubeContent = (pageToken: string): UseQueryResult<IYoutubeCon
     ["youtubeContent", pageToken],
     async () => {
       try {
-        const url = new URL("/api/youtube", window.location.hostname)
+        const url = new URL("/api/youtube", window.location.origin)
         if (pageToken)
           url.searchParams.append("pageToken", pageToken);
         url.searchParams.append("pageSize", "2");

@@ -4,6 +4,7 @@ import { getYoutubeContent } from "@/util/getYoutubeContent";
 const resultMax = 10;
 
 export async function GET(request: Request): Promise<Response> {
+  if(!request.url && !URL.canParse(request.url)) return new Response(JSON.stringify({ error: "Unable to perform request without initiating URL" }), { status: 500 });
   const { searchParams } = new URL(request.url);
   // pageToken will be returned from the initial and subsequent responses where pages are present
   const pageToken = searchParams.get("pageToken");
