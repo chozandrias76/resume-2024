@@ -2,7 +2,7 @@ import { KyselyDatabase } from "@/lib/database";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  const url = new URL(request.url, `http://localhost`);
+  const url = new URL(request.url);
   const queryParams = url.searchParams;
   const positions = queryParams.get("positions");
 
