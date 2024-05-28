@@ -1,5 +1,4 @@
 import { IYoutubeContent } from "@/hooks/useYoutubeContent";
-import { IThumbnail } from "@/util/getYoutubeContent";
 import { styles } from "@/util/styles";
 import { useEffect, useMemo, useRef } from "react";
 
@@ -43,44 +42,56 @@ const videoContainerStyles = styles(
   "bg-[url('https://place-hold.it/1280x720/666')]"
 );
 
-const nextLinkStyles = styles(
-  "absolute",
-  "bottom-12",
-  "left-12",
-  "xl:text-9xl",
-  "lg:text-7xl",
-  "md:text-6xl",
-  "text-5xl",
-  "elden-link",
-  "underline",
-  "cursor-pointer",
-  "text-zinc-500",
-  "decoration-zinc-800",
-  "decoration-4",
-  "underline-offset-8"
-);
+const nextLinkStyles = (page: string, maxPage: string) =>
+  styles(
+    "absolute",
+    "bottom-12",
+    "left-12",
+    "xl:text-9xl",
+    "lg:text-7xl",
+    "md:text-6xl",
+    "text-5xl",
+    ...(parseInt(page, 10) < parseInt(maxPage, 10) - 1
+      ? [
+          "elden-link",
+          "text-zinc-500",
+          "underline",
+          "decoration-zinc-800",
+          "decoration-4",
+          "cursor-pointer",
+          "underline-offset-8",
+        ]
+      : ["text-zinc-800", "cursor-not-allowed"])
+  );
 
 export function VideoFeed({
-  youtubeContent,
-  setPageToken,
-  nextPageToken,
-  prevPageToken
+  thumbnail: youtubeContent,
+  setPage,
+  page,
+  maxPage,
 }: {
-  youtubeContent?: IThumbnail;
-  setPageToken: React.Dispatch<React.SetStateAction<string>>
-  nextPageToken?: string;
-  prevPageToken?: string;
+  thumbnail?: {
+    data?: {
+      id: string;
+      embed_html: string;
+      description: string;
+      title: string;
+      thumbnail_url: string;
+    };
+    length?: string;
+  };
+  setPage: React.Dispatch<React.SetStateAction<string>>;
+  page: string;
+  maxPage: string;
 }) {
   const videoTitle = useMemo(
-    () => youtubeContent?.title,
+    () => youtubeContent?.data?.title,
     [youtubeContent]
   );
 
-
   const ref = useRef(null);
   function playEmbed() {
-    // References to at(0) will be updated when pagination is supported
-    if (!youtubeContent?.player) {
+    if (!youtubeContent?.data?.embed_html) {
       return;
     }
     if (!ref.current) {
@@ -88,8 +99,7 @@ export function VideoFeed({
     }
     const currentRef: HTMLElement = ref.current;
     const tempContainer = document.createElement("div");
-    tempContainer.innerHTML =
-      youtubeContent?.player.embedHtml || "";
+    tempContainer.innerHTML = youtubeContent?.data.embed_html || "";
 
     // Get the iframe element and modify the src to include autoplay
     const iframeElement: HTMLElement = tempContainer.firstChild as HTMLElement;
@@ -106,16 +116,8 @@ export function VideoFeed({
     currentRef.replaceWith(iframeElement);
   }
 
-  function nextPage() {
-    if (!nextPageToken) {
-      return;
-    }
-    setPageToken(nextPageToken)
-  }
-
   useEffect(() => {
-    // References to at(0) will be updated when pagination is supported
-    if (!youtubeContent?.thumbnailURL) {
+    if (!youtubeContent?.data?.thumbnail_url) {
       return;
     }
     if (!ref.current) {
@@ -123,10 +125,16 @@ export function VideoFeed({
     }
     const currentRef: HTMLElement = ref.current;
 
-    currentRef.style.backgroundImage = `url("${
-      youtubeContent?.thumbnailURL
-    }")`;
+    currentRef.style.backgroundImage = `url("${youtubeContent?.data.thumbnail_url}")`;
   }, [ref, youtubeContent]);
+
+  const nextVideo = useMemo(() => {
+    if (parseInt(page, 10) === parseInt(maxPage, 10) - 1) return () => {};
+    const pageNumber = parseInt(page, 10);
+    return () => {
+      setPage((pageNumber + 1).toString());
+    };
+  }, [page, setPage, maxPage]);
 
   return (
     <>
@@ -139,7 +147,9 @@ export function VideoFeed({
             <div className="absolute top-1/2 left-12 transform translate-x-1/2 text-base max-w-half">
               {videoTitle}
             </div>
-            <div className={nextLinkStyles} onClickCapture={nextPage}>next</div>
+            <div className={nextLinkStyles(page, maxPage)} onClick={nextVideo}>
+              next
+            </div>
             <div ref={ref} className={videoContainerStyles}>
               <span
                 className="text-7xl elden-link text-zinc-600 cursor-pointer"
