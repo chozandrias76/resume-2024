@@ -1,5 +1,7 @@
+import { createOnError } from "@/util/createOnError";
 import { UseQueryResult, useQuery } from "react-query";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
+import { Group, Object3DEventMap} from "three";
 
 async function fetchAndParseModel(url: string) {
   const response = await fetch(url);
@@ -8,7 +10,7 @@ async function fetchAndParseModel(url: string) {
   return base64;
 }
 
-export const useHeroModel = (): UseQueryResult<ReturnType<typeof OBJLoader.prototype.parse>> => {
+export const useHeroModel = (): UseQueryResult<Group<Object3DEventMap>> => {
   return useQuery(
     ["heroModel"],
     async () => {
@@ -17,6 +19,9 @@ export const useHeroModel = (): UseQueryResult<ReturnType<typeof OBJLoader.proto
       const loadedModel = loader.parse(model);
       return loadedModel;
     },
-    {onError: (error) => console.error("Error fetching presigned URL", error),}
+    {
+      onError: createOnError(),
+      refetchOnWindowFocus: false,
+    }
   )
 }

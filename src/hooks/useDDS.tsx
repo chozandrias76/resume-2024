@@ -1,3 +1,4 @@
+import { createOnError } from "@/util/createOnError";
 import { UseQueryResult, useQuery } from "react-query";
 
 export const useDDS = (relativePath: string): UseQueryResult<string> => {
@@ -8,6 +9,9 @@ export const useDDS = (relativePath: string): UseQueryResult<string> => {
       const json = JSON.parse(result)
       return json.data;
     },
-    {onError: (error) => console.error("Error fetching presigned URL", error),}
+    {
+      onError: createOnError(),
+      refetchOnWindowFocus: false,
+    }
   )
 }

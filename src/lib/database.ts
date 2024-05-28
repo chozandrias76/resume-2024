@@ -1,12 +1,22 @@
 import { Kysely } from "kysely";
 import type { IDatabase, Database } from "./database.interface";
 import type { ERApiData } from "./erApiData.interface";
+import { createKysely } from "@vercel/postgres-kysely";
 
 export class KyselyDatabase implements IDatabase {
   private readonly db: Kysely<Database>;
+  private static instance: KyselyDatabase;
 
   constructor(db: Kysely<Database>) {
     this.db = db;
+  }
+
+  static getInstance(): KyselyDatabase {
+    if (!this.instance) {
+      this.instance = new KyselyDatabase(createKysely<Database>());
+    }
+  
+    return this.instance;
   }
 
   async getImageKeyByName(
